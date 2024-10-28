@@ -1,0 +1,10 @@
+此时，我们只要执行，npm version patch ，这是我们项目中的 package.json文件中的version，会自增。注意，不要随意修改name，npm会根据name更新对应的包。我的package.json中version从1.0.2自增到了1.0.3
+最后，执行npm publish，会出现下面的信息，此时，我们的包就更新完成了
+
+
+npm version patch     版本自增加
+npm publish           更新版本
+
+
+npm login --registry=https://registry.npmjs.org
+npm publish --registry=https://registry.npmjs.org

@@ -1,0 +1,21 @@
+{
+  "name": "yml2213-tool",
+  "version": "1.0.4",
+  "description": "tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yml",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.12",
+    "dotenv": "^16.4.5",
+    "got": "^11.5.1",
+    "hpagent": "^1.2.0",
+    "jsrsasign": "^11.1.0",
+    "node-rsa": "^1.1.1",
+    "request-promise-native": "^1.0.9"
+  }
+}
