@@ -150,17 +150,19 @@ function BASE64Decode(str) {
 }
 
 
+
 /**
- * AES 加密（crypto-js）
- * @param {string} str 待加密字符串
- * @param {string} mode 加密模式    CBC/ECB/CTR/CFB/OFB
- * @param {string} key 使用的 key
- * @param {string} [iv] 使用的 iv（ECB 不需要 iv）
- * @param {string} [padding] 填充方式（默认为 Pkcs7）  Pkcs7=Pkcs5 / NoPadding / ZeroPadding /
- * @param {string} [type] 加密还是解密 默认加密  encrypt | decrypt
- * @returns {string} 格式结果
+ * 使用 CryptoJS 库进行 AES 加密或解密
+ * @param {string} str 待加密或解密的字符串
+ * @param {string} mode 加密模式，可以是 CBC/ECB/CTR/CFB/OFB
+ * @param {string} key 使用的密钥
+ * @param {string} [iv] 使用的初始化向量（IV），ECB 模式不需要 IV
+ * @param {string} [padding] 填充方式，默认为 Pkcs7。可选 Pkcs5 / NoPadding / ZeroPadding
+ * @param {string} [type] 操作类型，默认为加密。可选 encrypt | decrypt
+ * @param {string} [outputType] 输出类型，默认为 Base64。可选 b64 | hex
+ * @returns {string} 加密或解密后的字符串
  */
-function AES(str, mode, key, iv, padding = 'Pkcs7', type = 'encrypt') {
+function AES(str, mode, key, iv, padding = 'Pkcs7', type = 'encrypt', outputType = 'b64') {
     let key_word = CryptoJS.enc.Utf8.parse(key);
     let password = CryptoJS.enc.Utf8.parse(str);
     let mode_up = mode.toUpperCase()
@@ -173,18 +175,22 @@ function AES(str, mode, key, iv, padding = 'Pkcs7', type = 'encrypt') {
     if (padding) {
         options.padding = CryptoJS.pad[padding];
     }
+    let result;
     if (type === 'decrypt') {
         let ivWord = CryptoJS.enc.Utf8.parse(iv);
-        let decrypted = CryptoJS.AES.decrypt(str, key_word, {
+        result = CryptoJS.AES.decrypt(str, key_word, {
             iv: ivWord,
             padding: CryptoJS.pad[padding],
             mode: CryptoJS.mode[mode_up]
         });
-        return decrypted.toString(CryptoJS.enc.Utf8);
+    } else {
+        result = CryptoJS.AES[type](password, key_word, options);
     }
-    let encrypted = CryptoJS.AES[type](password, key_word, options);
-    return encrypted.toString()
-
+    if (outputType === 'hex') {
+        return result.ciphertext.toString(CryptoJS.enc.Hex);;
+    } else {
+        return result.toString(CryptoJS.enc.Base64);
+    }
 }
 
 
