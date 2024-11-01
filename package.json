@@ -1,6 +1,6 @@
 {
   "name": "yml2213-tool",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "tool",
   "main": "index.js",
   "scripts": {
