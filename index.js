@@ -7,50 +7,22 @@ const random = require("./res/random")
 const time = require("./res/time")
 const tools = require("./res/tools")
 const sort = require("./res/sort")
+const got = require('got');
+const requestPromise = require('request-promise-native');
 
-// module.exports = {
-//     checkEnv,
-//     phone_num,
-//     randomszxx: randomszxx,
-//     randomInt: randomInt,
-//     ts13: ts13,
-//     ts10: ts10,
-//     tmtoDate: tmtoDate,
-//     local_hours: local_hours,
-//     local_minutes: local_minutes,
-//     local_year: local_year,
-//     local_month: local_month,
-//     local_month_two: local_month_two,
-//     local_day: local_day,
-//     local_day_two: local_day_two,
-//     yiyan: yiyan,
-//     wait: wait,
-//
-//     base64_encode: base64_encode,
-//     base64_decode: base64_decode,
-//     MD5_Encrypt: MD5_Encrypt,
-//     SHA256_Encrypt: SHA256_Encrypt,
-//     SHA1_Encrypt: SHA1_Encrypt,
-//     RSA_Encrypt: RSA_Encrypt,
-//
-// };
 module.exports = {
     encrypt,
     random,
     time,
     tools,
     sort,
-    request_got,
+    request_Promise,
     request,
     checkEnv,
     yiyan,
     b64_encode,
     b64_decode,
 };
-
-
-const got = require('got');
-const requestPromise = require('request-promise-native');
 
 
 /**
@@ -70,7 +42,7 @@ async function yiyan() {
 }
 
 
-async function request_got(options) {
+async function request(options) {
     debugProxy(options)
     const got = require("got")
     let response, body, res_hd, res
@@ -107,7 +79,7 @@ async function request_got(options) {
     return {res_hd, res}
 }
 
-async function request(options) {
+async function request_Promise(options) {
     debugProxy(options);
     let response, body, res_hd, res;
     try {
