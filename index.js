@@ -11,17 +11,15 @@ const got = require('got');
 const requestPromise = require('request-promise-native');
 
 module.exports = {
-    encrypt,
-    random,
-    time,
-    tools,
-    sort,
+    ...encrypt,
+    ...random,
+    ...time,
+    ...tools,
+    ...sort,
     request_Promise,
     request,
     checkEnv,
     yiyan,
-    b64_encode,
-    b64_decode,
 };
 
 
@@ -58,7 +56,7 @@ async function request(options) {
         }
         response = await got(options, {
             followRedirect: false,
-            https: {rejectUnauthorized: false},
+            https: { rejectUnauthorized: false },
             timeout: 13000,
         })
     } catch (error) {
@@ -76,7 +74,7 @@ async function request(options) {
             }
         }
     }
-    return {res_hd, res}
+    return { res_hd, res }
 }
 
 async function request_Promise(options) {
@@ -108,19 +106,19 @@ async function request_Promise(options) {
         res_hd = response.headers; // 注意：request-promise-native 返回的response已经包含了headers
         if (body) {
             try {
-                // 如果response不是JSON格式，这里可能会抛出错误
+                // 如果response不是JSON格式，这���可能会抛出错误
                 res = typeof body === 'string' ? JSON.parse(body) : body;
             } catch (e) {
                 res = body;
             }
         }
     }
-    return {res_hd, res};
+    return { res_hd, res };
 }
 
 
 function debugProxy(options) {
-    const {HttpProxyAgent, HttpsProxyAgent} = require("hpagent")
+    const { HttpProxyAgent, HttpsProxyAgent } = require("hpagent")
     let httpProxy = process.env.DEBUG_PROXY
     if (httpProxy) {
         options.https = {
@@ -165,21 +163,6 @@ async function checkEnv(ck, name) {
             console.log(`未填写变量 ${name} ,请仔细阅读脚本说明!`);
         }
     });
-}
-
-
-/**
- * base64 编码
- */
-function b64_encode(data) {
-    return Buffer.from(data, 'utf-8').toString('base64')
-}
-
-/**
- * base64 解码
- */
-function b64_decode(data) {
-    return Buffer.from(data, 'base64').toString('utf8')
 }
 
 

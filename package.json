@@ -1,11 +1,19 @@
 {
   "name": "yml-util",
   "version": "1.0.8",
-  "description": "tool",
+  "description": "A utility library for common JavaScript operations",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "utils",
+    "encryption",
+    "time",
+    "random",
+    "tools"
+  ],
   "author": "yml",
   "license": "ISC",
   "dependencies": {
