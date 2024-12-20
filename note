@@ -2,8 +2,8 @@
 最后，执行npm publish，会出现下面的信息，此时，我们的包就更新完成了
 
 
-npm version patch     版本自增加
-npm publish           更新版本
+npm version patch      版本自增加
+npm publish            更新版本
 
 
 npm login --registry=https://registry.npmjs.org
