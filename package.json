@@ -1,6 +1,6 @@
 {
   "name": "yml-util",
-  "version": "1.0.8",
+  "version": "1.0.7",
   "description": "tool",
   "main": "index.js",
   "scripts": {
