@@ -23,13 +23,13 @@ const NodeRSA = require("node-rsa")
  * @returns {Promise<string>} 返回签名的Base64 URL Safe编码。
  */
 function SHA256withRSA(content, private_key) {
-    const rs = require('jsrsasign');
-    const key = rs.KEYUTIL.getKey(private_key);
-    const signature = new rs.KJUR.crypto.Signature({alg: "SHA256withRSA"});
-    signature.init(key);
-    signature.updateString(content);
-    const originSign = signature.sign();
-    return rs.hextob64u(originSign);
+    const rs = require('jsrsasign')
+    const key = rs.KEYUTIL.getKey(private_key)
+    const signature = new rs.KJUR.crypto.Signature({ alg: "SHA256withRSA" })
+    signature.init(key)
+    signature.updateString(content)
+    const originSign = signature.sign()
+    return rs.hextob64u(originSign)
 }
 
 
@@ -60,9 +60,9 @@ function MD5(str, isUp = false, num = 32) {
  */
 function SHA256(data) {
     // 使用 CryptoJS 库的 SHA256 函数计算数据的哈希值
-    const hash = CryptoJS.SHA256(data);
+    const hash = CryptoJS.SHA256(data)
     // 将哈希值转换为字符串表示
-    return hash.toString();
+    return hash.toString()
 }
 
 /**
@@ -73,9 +73,9 @@ function SHA256(data) {
  */
 function HMACSHA256(key, data) {
     // 使用 CryptoJS 库的 HMAC 函数计算 HMAC-SHA256
-    const hash = CryptoJS.HmacSHA256(data, key);
+    const hash = CryptoJS.HmacSHA256(data, key)
     // 将哈希值转换为字符串表示
-    return hash.toString();
+    return hash.toString()
 }
 
 /**
@@ -86,9 +86,9 @@ function HMACSHA256(key, data) {
  */
 function HMACMD5(key, data) {
     // 使用 CryptoJS 库的 HMAC 函数计算 HMAC-MD5
-    const hash = CryptoJS.HmacMD5(data, key);
+    const hash = CryptoJS.HmacMD5(data, key)
     // 将哈希值转换为字符串表示
-    return hash.toString();
+    return hash.toString()
 }
 
 
@@ -99,9 +99,9 @@ function HMACMD5(key, data) {
  */
 function SHA1(data) {
     // 使用 CryptoJS 库的 SHA256 函数计算数据的哈希值
-    const hash = CryptoJS.SHA1(data);
+    const hash = CryptoJS.SHA1(data)
     // 将哈希值转换为字符串表示
-    return hash.toString();
+    return hash.toString()
 }
 
 
@@ -115,8 +115,8 @@ function SHA1(data) {
 function RSA(str, key, type = 'base64') {
     const node_rsa = new NodeRSA(key, 'public', {
         encryptionScheme: 'pkcs1'
-    });
-    return node_rsa.encrypt(str, type, 'utf8');
+    })
+    return node_rsa.encrypt(str, type, 'utf8')
 }
 
 /**
@@ -126,8 +126,8 @@ function RSA(str, key, type = 'base64') {
  * @returns string 解密结果
  */
 function RSADecrypt(encryptedStr, key) {
-    const node_rsa = new NodeRSA(key, {encryptionScheme: 'pkcs1'});
-    return node_rsa.decrypt(encryptedStr, 'utf8');
+    const node_rsa = new NodeRSA(key, { encryptionScheme: 'pkcs1' })
+    return node_rsa.decrypt(encryptedStr, 'utf8')
 }
 
 
@@ -163,33 +163,32 @@ function BASE64Decode(str) {
  * @returns {string} 加密或解密后的字符串
  */
 function AES(str, mode, key, iv, padding = 'Pkcs7', type = 'encrypt', outputType = 'b64') {
-    let key_word = CryptoJS.enc.Utf8.parse(key);
-    let password = CryptoJS.enc.Utf8.parse(str);
-    let mode_up = mode.toUpperCase()
-    let options = {
-        mode: CryptoJS.mode[mode_up]
-    };
-    if (mode !== 'ECB') {
-        options.iv = CryptoJS.enc.Utf8.parse(iv);
+    // 处理密钥和IV
+    const keyWord = CryptoJS.enc.Utf8.parse(key)
+    const ivWord = CryptoJS.enc.Utf8.parse(iv)
+
+    // 设置选项
+    const options = {
+        iv: ivWord,
+        mode: CryptoJS.mode[mode.toUpperCase()],
+        padding: CryptoJS.pad[padding]
     }
-    if (padding) {
-        options.padding = CryptoJS.pad[padding];
-    }
-    let result;
+
+    // 根据操作类型处理
     if (type === 'decrypt') {
-        let ivWord = CryptoJS.enc.Utf8.parse(iv);
-        result = CryptoJS.AES.decrypt(str, key_word, {
-            iv: ivWord,
-            padding: CryptoJS.pad[padding],
-            mode: CryptoJS.mode[mode_up]
-        });
+        // 解密操作
+        const decrypted = CryptoJS.AES.decrypt(str, keyWord, options)
+        return decrypted.toString(CryptoJS.enc.Utf8)
     } else {
-        result = CryptoJS.AES[type](password, key_word, options);
-    }
-    if (outputType === 'hex') {
-        return result.ciphertext.toString(CryptoJS.enc.Hex);;
-    } else {
-        return result.toString(CryptoJS.enc.Base64);
+        // 加密操作
+        const encrypted = CryptoJS.AES.encrypt(str, keyWord, options)
+
+        // 根据输出类型返回结果
+        if (outputType === 'hex') {
+            return encrypted.ciphertext.toString(CryptoJS.enc.Hex)
+        } else {
+            return encrypted.toString()  // 默认返回Base64格式
+        }
     }
 }
 
@@ -204,18 +203,18 @@ function AES(str, mode, key, iv, padding = 'Pkcs7', type = 'encrypt', outputType
  * @returns {string} 格式加密结果
  */
 function DES(str, mode, key, iv, padding = 'Pkcs7') {
-    let key_word = CryptoJS.enc.Utf8.parse(key);
-    let password = CryptoJS.enc.Utf8.parse(str);
-    let mode_up = mode.toUpperCase();
+    let key_word = CryptoJS.enc.Utf8.parse(key)
+    let password = CryptoJS.enc.Utf8.parse(str)
+    let mode_up = mode.toUpperCase()
     let options = {
         mode: CryptoJS.mode[mode_up]
-    };
+    }
     if (mode !== 'ECB') {
-        options.iv = CryptoJS.enc.Utf8.parse(iv);
+        options.iv = CryptoJS.enc.Utf8.parse(iv)
     }
     if (padding) {
-        options.padding = CryptoJS.pad[padding];
+        options.padding = CryptoJS.pad[padding]
     }
-    let encrypted = CryptoJS.DES.encrypt(password, key_word, options);
-    return encrypted.toString();
+    let encrypted = CryptoJS.DES.encrypt(password, key_word, options)
+    return encrypted.toString()
 }
