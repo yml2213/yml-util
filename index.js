@@ -7,20 +7,20 @@ const random = require("./res/random")
 const time = require("./res/time")
 const tools = require("./res/tools")
 const sort = require("./res/sort")
-const got = require('got');
-const requestPromise = require('request-promise-native');
+const got = require('got')
+const requestPromise = require('request-promise-native')
 
 module.exports = {
-    ...encrypt,
-    ...random,
-    ...time,
-    ...tools,
-    ...sort,
+    encrypt,
+    random,
+    time,
+    tools,
+    sort,
     request_Promise,
     request,
     checkEnv,
     yiyan,
-};
+}
 
 
 /**
@@ -29,13 +29,13 @@ module.exports = {
  */
 async function yiyan() {
     try {
-        const response = await got('https://v1.hitokoto.cn/');
-        const data = JSON.parse(response.body);
+        const response = await got('https://v1.hitokoto.cn/')
+        const data = JSON.parse(response.body)
         // console.log(message);
-        return `[一言]: ${data.hitokoto}  by--${data.from}`;
+        return `[一言]: ${data.hitokoto}  by--${data.from}`
     } catch (error) {
-        console.error('获取一言时发生错误:', error);
-        return error;
+        console.error('获取一言时发生错误:', error)
+        return error
     }
 }
 
@@ -46,9 +46,9 @@ async function request(options) {
     let response, body, res_hd, res
     try {
         if (options.method.toUpperCase() === "GET") {
-            delete options.json;
-            delete options.body;
-            delete options.from;
+            delete options.json
+            delete options.body
+            delete options.from
         }
         if (options.params) {
             options.searchParams = options.params
@@ -78,12 +78,12 @@ async function request(options) {
 }
 
 async function request_Promise(options) {
-    debugProxy(options);
-    let response, body, res_hd, res;
+    debugProxy(options)
+    let response, body, res_hd, res
     try {
         if (options.params) {
             // request库使用 qs 字符串化参数
-            options.qs = options.params;
+            options.qs = options.params
         }
         // console.log(options);
         response = await requestPromise({
@@ -95,25 +95,25 @@ async function request_Promise(options) {
             followRedirect: false,
             rejectUnauthorized: false,
             timeout: 13000,
-        });
+        })
     } catch (error) {
-        response = error.response;
-        console.error(error);
+        response = error.response
+        console.error(error)
     }
 
     if (response) {
-        body = response;
-        res_hd = response.headers; // 注意：request-promise-native 返回的response已经包含了headers
+        body = response
+        res_hd = response.headers // 注意：request-promise-native 返回的response已经包含了headers
         if (body) {
             try {
                 // 如果response不是JSON格式，这���可能会抛出错误
-                res = typeof body === 'string' ? JSON.parse(body) : body;
+                res = typeof body === 'string' ? JSON.parse(body) : body
             } catch (e) {
-                res = body;
+                res = body
             }
         }
     }
-    return { res_hd, res };
+    return { res_hd, res }
 }
 
 
@@ -144,25 +144,25 @@ function debugProxy(options) {
  */
 async function checkEnv(ck, name) {
     return new Promise((resolve) => {
-        let ckArr = [];
+        let ckArr = []
         if (ck) {
             if (ck.indexOf("@") !== -1) {
                 ck.split("@").forEach((item) => {
-                    ckArr.push(item);
-                });
+                    ckArr.push(item)
+                })
             } else if (ck.indexOf("\n") !== -1) {
                 ck.split("\n").forEach((item) => {
-                    ckArr.push(item);
-                });
+                    ckArr.push(item)
+                })
             } else {
-                ckArr.push(ck);
+                ckArr.push(ck)
             }
-            resolve(ckArr);
+            resolve(ckArr)
         } else {
-            console.log();
-            console.log(`未填写变量 ${name} ,请仔细阅读脚本说明!`);
+            console.log()
+            console.log(`未填写变量 ${name} ,请仔细阅读脚本说明!`)
         }
-    });
+    })
 }
 
 
